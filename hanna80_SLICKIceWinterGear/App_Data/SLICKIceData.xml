@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<WinterGearItems>
+	<WinterGear>
+		<Id>1</Id>
+		<Name>The White Marshmellow</Name>
+		<Weight>2</Weight>
+		<GearType>Coat</GearType>
+		<Condition>10</Condition>
+	</WinterGear>
+	<WinterGear>
+		<Id>2</Id>
+		<Name>The Lone Boarder</Name>
+		<Weight>4</Weight>
+		<GearType>Coat</GearType>
+		<Condition>9</Condition>
+	</WinterGear>
+	<WinterGear>
+		<Id>3</Id>
+		<Name>Golden Rod Board</Name>
+		<Weight>20</Weight>
+		<GearType>Snowboard</GearType>
+		<Condition>10</Condition>
+	</WinterGear>
+	<WinterGear>
+		<Id>4</Id>
+		<Name>Twin Torpedoes</Name>
+		<Weight>30</Weight>
+		<GearType>Skis</GearType>
+		<Condition>8</Condition>
+	</WinterGear>
+	<WinterGear>
+		<Id>5</Id>
+		<Name>Feather Duster</Name>
+		<Weight>18</Weight>
+		<GearType>Snowboard</GearType>
+		<Condition>9</Condition>
+	</WinterGear>
+	<WinterGear>
+		<Id>6</Id>
+		<Name>Marble Glazers</Name>
+		<Weight>29</Weight>
+		<GearType>Skis</GearType>
+		<Condition>7</Condition>
+	</WinterGear>
+	<WinterGear>
+		<Id>7</Id>
+		<Name>Rugged Khakis</Name>
+		<Weight>6</Weight>
+		<GearType>Pants</GearType>
+		<Condition>8</Condition>
+	</WinterGear>
+	<WinterGear>
+		<Id>8</Id>
+		<Name>The Perfboard</Name>
+		<Weight>10</Weight>
+		<GearType>Snowboard</GearType>
+		<Condition>6</Condition>
+	</WinterGear>
+	<WinterGear>
+		<Id>9</Id>
+		<Name>The Switchboards</Name>
+		<Weight>34</Weight>
+		<GearType>Skis</GearType>
+		<Condition>9</Condition>
+	</WinterGear>
+	<WinterGear>
+		<Id>10</Id>
+		<Name>Premium Light Boots</Name>
+		<Weight>5</Weight>
+		<GearType>Foot</GearType>
+		<Condition>10</Condition>
+	</WinterGear>
+	<WinterGear>
+		<Id>11</Id>
+		<Name>Snow Burglar</Name>
+		<Weight>1</Weight>
+		<GearType>Face</GearType>
+		<Condition>9</Condition>
+	</WinterGear>
+	<WinterGear>
+		<Id>12</Id>
+		<Name>Waterproof Boots</Name>
+		<Weight>7</Weight>
+		<GearType>Foot</GearType>
+		<Condition>9</Condition>
+	</WinterGear>
+	<WinterGear>
+		<Id>13</Id>
+		<Name>WhiteOut Goggles</Name>
+		<Weight>2</Weight>
+		<GearType>Face</GearType>
+		<Condition>10</Condition>
+	</WinterGear>
+	<WinterGear>
+		<Id>14</Id>
+		<Name>Break-Speed Board</Name>
+		<Weight>15</Weight>
+		<GearType>Snowboard</GearType>
+		<Condition>8</Condition>
+	</WinterGear>
+	<WinterGear>
+		<Id>15</Id>
+		<Name>Windbreaker Jacket</Name>
+		<Weight>6</Weight>
+		<GearType>Coat</GearType>
+		<Condition>9</Condition>
+	</WinterGear>
+	<WinterGear>
+		<Id>16</Id>
+		<Name>Insulated Jacket</Name>
+		<Weight>8</Weight>
+		<GearType>Coat</GearType>
+		<Condition>8</Condition>
+	</WinterGear>
+	<WinterGear>
+		<Id>17</Id>
+		<Name>Mountain Dew (TM) Skis</Name>
+		<Weight>20</Weight>
+		<GearType>Skis</GearType>
+		<Condition>7</Condition>
+	</WinterGear>
+	<WinterGear>
+		<Id>18</Id>
+		<Name>WhiteOut Board</Name>
+		<Weight>23</Weight>
+		<GearType>Snowboard</GearType>
+		<Condition>9</Condition>
+	</WinterGear>
+</WinterGearItems>
