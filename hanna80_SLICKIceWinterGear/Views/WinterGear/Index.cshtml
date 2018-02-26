@@ -1,0 +1,111 @@
+﻿@model IEnumerable<hanna80_SLICKIceWinterGear.Models.WinterGear>
+
+@{
+	ViewData["Title"] = "My Items";
+}
+
+<h2>My Items</h2>
+
+@using (Html.BeginForm())
+{
+	<div id="FilterSearch" class="form-horizontal">
+
+		<div class="form-group">
+			@Html.Label("searchCriteria", "Search by Name", new { @class = "control-label col-md-2" })
+			@Html.TextBox("searchCriteria", null, new { @class = "form-control" })
+		</div>
+
+		<div class="form-group">
+			@Html.Label("gearTypeFilter", "Filter by Gear Type", htmlAttributes: new { @class = "control-label col-md-2" })
+			@Html.DropDownList(
+				"gearTypeFilter",
+				new SelectList(ViewBag.gearTypes),
+				"All Gear Types",
+				new { @class = "form-control" }
+			)
+		</div>
+
+		<div class="form-group">
+			<input
+				   type="submit"
+				   value="Find Items"
+				   class="btn col-md-2 col-md-offset-1"
+			/>
+			<input
+				   type="button"
+				   value="Reset Ordering"
+				   onclick="location.href='@Url.Action("Index", "WinterGear", new { })'"
+				   class="btn col-md-2 col-md-offset-1"
+			/>
+			<input
+				   type="button"
+				   value="Reverse Order"
+				   onclick="location.href='@Url.Action("Index", "WinterGear", new { sortOrder = ViewBag.sortOrder, flipOrder = !ViewBag.flipOrder })'"
+				   class="btn col-md-2 col-md-offset-1"
+			/>
+		</div>
+
+	</div>
+}
+
+<p>
+	<a asp-action="Create">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            @*<th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>*@
+            <th>
+				@Html.ActionLink(@Html.DisplayNameFor(model => model.Name).ToString(), "Index", new { sortOrder = "name" })
+            </th>
+            <th>
+                @Html.ActionLink(@Html.DisplayNameFor(model => model.Weight).ToString(), "Index", new { sortOrder = "weight" })
+            </th>
+            <th>
+                @Html.ActionLink(@Html.DisplayNameFor(model => model.GearType).ToString(), "Index", new { sortOrder = "gearType" })
+			</th>
+			<th>
+				@Html.ActionLink(@Html.DisplayNameFor(model => model.Condition).ToString(), "Index", new { sortOrder = "condition" })
+			</th>
+			<th>
+			</th>
+		</tr>
+
+	</thead>
+
+	<tbody>
+@foreach (var item in Model) {
+
+		<tr>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Weight)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GearType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Condition) / 10 @*(@(item.Condition * 10)%)*@
+            </td>
+            <td>
+				<div class="form-group-sm no-color btn-sm">
+					<input type="button" value="Details" class="btn btn-info"
+						   onclick="location.href='@Url.Action("Details", "WinterGear", new { id = item.Id })'" />
+					<input type="button" value="Edit" class="btn btn-warning"
+						   onclick="location.href='@Url.Action("Edit", "WinterGear", new { id = item.Id })'" />
+					<input type="button" value="Remove" class="btn btn-danger"
+						   onclick="location.href='@Url.Action("Delete", "WinterGear", new { id = item.Id })'" />
+				</div>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

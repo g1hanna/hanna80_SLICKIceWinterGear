@@ -1,0 +1,53 @@
+﻿@model hanna80_SLICKIceWinterGear.Models.WinterGear
+
+@{
+    ViewData["Title"] = "View Item";
+}
+
+<h2>@Model.Name Details</h2>
+
+<div>
+    <h4>WinterGear</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        @*<dt>
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Id)
+        </dd>*@
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Weight)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Weight)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.GearType)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.GearType)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Condition)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Condition)
+        </dd>
+    </dl>
+</div>
+<div>
+    <input type="button" value="Edit" class="btn btn-warning"
+		onclick="location.href='@Url.Action("Edit", "WinterGear", new { id = Model.Id })'" />
+	<input type="button" value="Remove" class="btn btn-danger"
+		   onclick="location.href='@Url.Action("Delete", "WinterGear", new { id = Model.Id })'" />
+	<br />
+	<br />
+    <a asp-action="Index">Back to List</a>
+</div>
