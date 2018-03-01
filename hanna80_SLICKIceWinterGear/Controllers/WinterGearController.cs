@@ -65,6 +65,7 @@ namespace hanna80_SLICKIceWinterGear.Controllers
 			ViewBag.sortOrder = sortOrder;
 			ViewBag.flipOrder = flipOrder;
 			ViewBag.gearTypes = listOfGearTypes();
+			ViewBag.viewMode = "sort";
 
 			return View(winterGearItems);
         }
@@ -85,7 +86,7 @@ namespace hanna80_SLICKIceWinterGear.Controllers
 		}
 
 		[HttpPost]
-		public ActionResult Index(string searchCriteria, string gearTypeFilter, bool flipOrder = false)
+		public ActionResult Index(string searchCriteria, string gearTypeFilter, string sortOrder, bool flipOrder = false)
 		{
 			WinterGearRepository gearRepository = new WinterGearRepository(_dataSettings);
 
@@ -111,8 +112,12 @@ namespace hanna80_SLICKIceWinterGear.Controllers
 				gearItems = gearItems.Reverse();
 			}
 
+			ViewBag.sortOrder = sortOrder;
 			ViewBag.flipOrder = flipOrder;
 			ViewBag.gearTypes = listOfGearTypes();
+			ViewBag.gearTypeFilter = gearTypeFilter;
+			ViewBag.searchCriteria = searchCriteria;
+			ViewBag.viewMode = "filter";
 
 			return View(gearItems);
 		}

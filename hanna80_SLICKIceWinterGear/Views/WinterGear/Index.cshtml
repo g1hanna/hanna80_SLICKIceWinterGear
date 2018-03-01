@@ -37,12 +37,22 @@
 				   onclick="location.href='@Url.Action("Index", "WinterGear", new { })'"
 				   class="btn col-md-2 col-md-offset-1"
 			/>
-			<input
-				   type="button"
-				   value="Reverse Order"
-				   onclick="location.href='@Url.Action("Index", "WinterGear", new { sortOrder = ViewBag.sortOrder, flipOrder = !ViewBag.flipOrder })'"
-				   class="btn col-md-2 col-md-offset-1"
-			/>
+			@if (ViewBag.viewMode == "filter")
+			{
+				<input type="button"
+					   value="Reverse Order"
+					   onclick="location.href='@Url.Action("Index", "WinterGear", new { searchCriteria = ViewBag.searchCriteria, gearTypeFilter = ViewBag.gearTypeFilter, sortOrder = ViewBag.sortOrder, flipOrder = !ViewBag.flipOrder })'"
+					   class="btn col-md-2 col-md-offset-1"
+				/>
+			}
+			else
+			{
+				<input type="button"
+					   value="Reverse Order"
+					   onclick="location.href='@Url.Action("Index", "WinterGear", new { sortOrder = ViewBag.sortOrder, flipOrder = !ViewBag.flipOrder })'"
+					   class="btn col-md-2 col-md-offset-1"
+				/>
+			}
 		</div>
 
 	</div>
