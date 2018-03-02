@@ -1,28 +1,50 @@
 ﻿@model IEnumerable<hanna80_SLICKIceWinterGear.Models.WinterGear>
 
+@*@using Microsoft.AspNetCore.Mvc;
+@using PagedList;
+@using PagedList.Mvc;*@
+@using hanna80_SLICKIceWinterGear.Utilities;
+
 @{
 	ViewData["Title"] = "My Items";
+
+	IPaginator<WinterGear> paginator = ViewBag.paginator;
 }
 
 <h2>My Items</h2>
+
+@*<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+	<div class="btn-group mr-2" role="group" aria-label="First group">
+		<button type="button" class="btn btn-secondary"
+			onclick="location.href = '@Url.Action("Index", new { page = 1, sortOrder = ViewBag.sortOrder })';">1</button>
+		<button type="button" class="btn btn-secondary"
+			onclick="location.href = '@Url.Action("Index", new { page = 2, sortOrder = ViewBag.sortOrder })';">2</button>
+		<button type="button" class="btn btn-secondary"
+			onclick="location.href = '@Url.Action("Index", new { page = 3, sortOrder = ViewBag.sortOrder })';">3</button>
+	</div>
+</div>*@
 
 @using (Html.BeginForm())
 {
 	<div id="FilterSearch" class="form-horizontal">
 
-		<div class="form-group">
-			@Html.Label("searchCriteria", "Search by Name", new { @class = "control-label col-md-2" })
-			@Html.TextBox("searchCriteria", null, new { @class = "form-control" })
-		</div>
+		<div class="row">
 
-		<div class="form-group">
-			@Html.Label("gearTypeFilter", "Filter by Gear Type", htmlAttributes: new { @class = "control-label col-md-2" })
-			@Html.DropDownList(
+			<div class="form-group col-md-6">
+				@Html.Label("searchCriteria", "Search by Name", new { @class = "control-label" })
+				@Html.TextBox("searchCriteria", null, new { @class = "form-control" })
+			</div>
+
+			<div class="form-group col-md-6">
+				@Html.Label("gearTypeFilter", "Filter by Gear Type", htmlAttributes: new { @class = "control-label" })
+				@Html.DropDownList(
 				"gearTypeFilter",
 				new SelectList(ViewBag.gearTypes),
 				"All Gear Types",
 				new { @class = "form-control" }
 			)
+			</div>
+
 		</div>
 
 		<div class="form-group">
@@ -61,6 +83,14 @@
 <p>
 	<a asp-action="Create">Create New</a>
 </p>
+
+<hr />
+
+Page @(paginator.PageCount < paginator.CurrentPageNumber ? 0 : paginator.CurrentPageNumber) of @paginator.PageCount
+<br />
+<br />
+@Html.Raw(paginator.RenderPaginatorNav(page => Url.Action("Index",
+	new { page, sortOrder = ViewBag.sortOrder, flipOrder = ViewBag.flipOrder })))
 
 <table class="table">
     <thead>
@@ -119,3 +149,9 @@
 }
     </tbody>
 </table>
+
+@Html.Raw(paginator.RenderPaginatorNav(page => Url.Action("Index",
+	new { page, sortOrder = ViewBag.sortOrder, flipOrder = ViewBag.flipOrder })))
+<br />
+
+<a href="#">Top</a>

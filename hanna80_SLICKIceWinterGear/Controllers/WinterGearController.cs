@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using hanna80_SLICKIceWinterGear.DAL;
 using hanna80_SLICKIceWinterGear.Models;
+using hanna80_SLICKIceWinterGear.Utilities;
 using Microsoft.AspNetCore.Hosting;
+//using PagedList;
 
 namespace hanna80_SLICKIceWinterGear.Controllers
 {
@@ -23,7 +25,7 @@ namespace hanna80_SLICKIceWinterGear.Controllers
 
         // GET: WinterGear
 		[HttpGet]
-        public ActionResult Index(string sortOrder, bool flipOrder = false)
+        public ActionResult Index(string sortOrder, int? page, bool flipOrder = false)
         {
 			WinterGearRepository repository = new WinterGearRepository(_dataSettings);
 
@@ -67,7 +69,13 @@ namespace hanna80_SLICKIceWinterGear.Controllers
 			ViewBag.gearTypes = listOfGearTypes();
 			ViewBag.viewMode = "sort";
 
-			return View(winterGearItems);
+			int pageNumber = (page ?? 1);
+
+			IPaginator<WinterGear> paginator = new Paginator<WinterGear>(winterGearItems, 10, pageNumber);
+
+			ViewBag.paginator = paginator;
+
+			return View(paginator.GetItems());
         }
 
 		[NonAction]

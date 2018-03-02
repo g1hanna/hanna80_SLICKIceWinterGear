@@ -33,3 +33,28 @@
         display: none;
     }
 }
+
+/* Styles for bootstrap navbar */
+.navbar {
+	background-color: cadetblue;
+}
+
+.navbar-brand, .navbar-nav a {
+	color: white;
+}
+
+body {
+	padding-top: 0px;
+}
+
+.body-content {
+	padding-top: 30px;
+}
+
+.navbar-toggle {
+	height: 50px;
+	width: 50px;
+	background-image: url(/images/ProductSnowboard.png);
+	background-size: contain;
+	border-radius: 10px;
+}
