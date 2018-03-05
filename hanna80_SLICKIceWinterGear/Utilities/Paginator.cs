@@ -42,10 +42,17 @@ namespace hanna80_SLICKIceWinterGear.Utilities
 
 		public Paginator(IEnumerable<T> originalItems, int itemsPerPage, int pageNumber)
 		{
+			if (originalItems == null)
+				originalItems = new T[0];
+
 			_itemCount = originalItems.Count();
 
 			// maximize item count
-			int maximumItemCount = _itemCount + (_itemCount % itemsPerPage);
+			// round up to nearest page
+			int maximumItemCount = 0;
+
+			while (maximumItemCount < _itemCount) maximumItemCount += itemsPerPage;
+
 			_pageCount = maximumItemCount / itemsPerPage;
 
 			ItemsPerPage = itemsPerPage;
@@ -191,9 +198,14 @@ namespace hanna80_SLICKIceWinterGear.Utilities
 			return htmlPaginatorNav.ToString();
 		}
 
-		public string RenderPaginatorSizeControl()
+		public string RenderPaginatorSizeControl(Func<int, string> actionGenerator, int pageSize = 10)
 		{
-			throw new NotImplementedException();
+			// build out an HTML widget for controlling size
+			StringBuilder htmlBuilder = new StringBuilder();
+
+			
+
+			return htmlBuilder.ToString();
 		}
 
 		public IEnumerable<T> GetItems()

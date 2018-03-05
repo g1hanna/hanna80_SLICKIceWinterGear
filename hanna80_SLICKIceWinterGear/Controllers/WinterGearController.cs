@@ -23,60 +23,129 @@ namespace hanna80_SLICKIceWinterGear.Controllers
 			_hostingEnvironment = env;
 		}
 
-        // GET: WinterGear
 		[HttpGet]
-        public ActionResult Index(string sortOrder, int? page, bool flipOrder = false)
-        {
-			WinterGearRepository repository = new WinterGearRepository(_dataSettings);
+		public ActionResult Index(SearchViewModel searchModel)
+		{
+			WinterGearRepository gearRepository = new WinterGearRepository(_dataSettings);
 
-			IEnumerable<WinterGear> winterGearItems;
-			using (repository)
+			IEnumerable<WinterGear> gearItems;
+
+			using (gearRepository)
 			{
-				winterGearItems = repository.SelectAll() as IList<WinterGear>;
+				gearItems = gearRepository.SelectAll() as IList<WinterGear>;
 			}
 
-			switch (sortOrder)
+			if (!string.IsNullOrWhiteSpace(searchModel.SearchCriteria))
+			{
+				gearItems = gearItems.Where(item => item.Name.ToUpper().Contains(searchModel.SearchCriteria.ToUpper()));
+			}
+
+			if (!string.IsNullOrWhiteSpace(searchModel.GearTypeFilter))
+			{
+				gearItems = gearItems.Where(item => item.GearType == searchModel.GearTypeFilter);
+			}
+
+			switch (searchModel.SortOrder)
 			{
 				case "name":
 					// order names ascending
-					winterGearItems = winterGearItems.OrderBy(i => i.Name);
+					gearItems = gearItems.OrderBy(i => i.Name);
 					break;
 				case "condition":
 					// order condition descending
-					winterGearItems = winterGearItems.OrderByDescending(i => i.Condition);
+					gearItems = gearItems.OrderByDescending(i => i.Condition);
 					break;
 				case "weight":
 					// order weight ascending
-					winterGearItems = winterGearItems.OrderBy(i => i.Weight);
+					gearItems = gearItems.OrderBy(i => i.Weight);
 					break;
 				case "gearType":
 					// order gearType ascending
-					winterGearItems = winterGearItems.OrderBy(i => i.GearType);
+					gearItems = gearItems.OrderBy(i => i.GearType);
 					break;
 				default:
 					// order id ascending
-					winterGearItems = winterGearItems.OrderBy(i => i.Id);
+					gearItems = gearItems.OrderBy(i => i.Id);
 					break;
 			}
 
-			if (flipOrder)
+			if (searchModel.FlipOrder)
 			{
-				winterGearItems = winterGearItems.Reverse();
+				gearItems = gearItems.Reverse();
 			}
 
-			ViewBag.sortOrder = sortOrder;
-			ViewBag.flipOrder = flipOrder;
-			ViewBag.gearTypes = listOfGearTypes();
-			ViewBag.viewMode = "sort";
+			int pageNumber = (searchModel.PageNumber ?? 1);
 
-			int pageNumber = (page ?? 1);
+			int itemsPerPage = (searchModel.PageSize ?? 10);
 
-			IPaginator<WinterGear> paginator = new Paginator<WinterGear>(winterGearItems, 10, pageNumber);
+			IPaginator<WinterGear> paginator = new Paginator<WinterGear>(gearItems, itemsPerPage, pageNumber);
 
 			ViewBag.paginator = paginator;
 
+			ViewBag.sortOrder = searchModel.SortOrder;
+			ViewBag.flipOrder = searchModel.FlipOrder;
+			ViewBag.gearTypes = listOfGearTypes();
+			ViewBag.gearTypeFilter = searchModel.GearTypeFilter;
+			ViewBag.searchCriteria = searchModel.SearchCriteria;
+			ViewBag.isSearch = true;
+
 			return View(paginator.GetItems());
-        }
+		}
+
+		//// GET: WinterGear
+		//[HttpGet]
+  //      public ActionResult Index(SortViewModel sortModel)
+  //      {
+		//	WinterGearRepository repository = new WinterGearRepository(_dataSettings);
+
+		//	IEnumerable<WinterGear> winterGearItems;
+		//	using (repository)
+		//	{
+		//		winterGearItems = repository.SelectAll() as IList<WinterGear>;
+		//	}
+
+		//	switch (sortModel.SortOrder)
+		//	{
+		//		case "name":
+		//			// order names ascending
+		//			winterGearItems = winterGearItems.OrderBy(i => i.Name);
+		//			break;
+		//		case "condition":
+		//			// order condition descending
+		//			winterGearItems = winterGearItems.OrderByDescending(i => i.Condition);
+		//			break;
+		//		case "weight":
+		//			// order weight ascending
+		//			winterGearItems = winterGearItems.OrderBy(i => i.Weight);
+		//			break;
+		//		case "gearType":
+		//			// order gearType ascending
+		//			winterGearItems = winterGearItems.OrderBy(i => i.GearType);
+		//			break;
+		//		default:
+		//			// order id ascending
+		//			winterGearItems = winterGearItems.OrderBy(i => i.Id);
+		//			break;
+		//	}
+
+		//	if (sortModel.FlipOrder)
+		//	{
+		//		winterGearItems = winterGearItems.Reverse();
+		//	}
+
+		//	ViewBag.sortOrder = sortModel.SortOrder;
+		//	ViewBag.flipOrder = sortModel.FlipOrder;
+		//	ViewBag.gearTypes = listOfGearTypes();
+		//	ViewBag.isSearch = false;
+
+		//	int pageNumber = (sortModel.PageNumber ?? 1);
+
+		//	IPaginator<WinterGear> paginator = new Paginator<WinterGear>(winterGearItems, 10, pageNumber);
+
+		//	ViewBag.paginator = paginator;
+
+		//	return View(paginator.GetItems());
+  //      }
 
 		[NonAction]
 		private IEnumerable<string> listOfGearTypes()
@@ -93,42 +162,71 @@ namespace hanna80_SLICKIceWinterGear.Controllers
 			return gearTypes;
 		}
 
-		[HttpPost]
-		public ActionResult Index(string searchCriteria, string gearTypeFilter, string sortOrder, bool flipOrder = false)
-		{
-			WinterGearRepository gearRepository = new WinterGearRepository(_dataSettings);
+		//[HttpPost]
+		//public ActionResult Index(SearchViewModel searchModel)
+		//{
+		//	WinterGearRepository gearRepository = new WinterGearRepository(_dataSettings);
 
-			IEnumerable<WinterGear> gearItems;
+		//	IEnumerable<WinterGear> gearItems;
 
-			using (gearRepository)
-			{
-				gearItems = gearRepository.SelectAll() as IList<WinterGear>;
-			}
+		//	using (gearRepository)
+		//	{
+		//		gearItems = gearRepository.SelectAll() as IList<WinterGear>;
+		//	}
 
-			if (!string.IsNullOrWhiteSpace(searchCriteria))
-			{
-				gearItems = gearItems.Where(item => item.Name.ToUpper().Contains(searchCriteria.ToUpper()));
-			}
+		//	if (!string.IsNullOrWhiteSpace(searchModel.SearchCriteria))
+		//	{
+		//		gearItems = gearItems.Where(item => item.Name.ToUpper().Contains(searchModel.SearchCriteria.ToUpper()));
+		//	}
 
-			if (!string.IsNullOrWhiteSpace(gearTypeFilter))
-			{
-				gearItems = gearItems.Where(item => item.GearType == gearTypeFilter);
-			}
+		//	if (!string.IsNullOrWhiteSpace(searchModel.GearTypeFilter))
+		//	{
+		//		gearItems = gearItems.Where(item => item.GearType == searchModel.GearTypeFilter);
+		//	}
 
-			if (flipOrder)
-			{
-				gearItems = gearItems.Reverse();
-			}
+		//	switch (searchModel.SortOrder)
+		//	{
+		//		case "name":
+		//			// order names ascending
+		//			gearItems = gearItems.OrderBy(i => i.Name);
+		//			break;
+		//		case "condition":
+		//			// order condition descending
+		//			gearItems = gearItems.OrderByDescending(i => i.Condition);
+		//			break;
+		//		case "weight":
+		//			// order weight ascending
+		//			gearItems = gearItems.OrderBy(i => i.Weight);
+		//			break;
+		//		case "gearType":
+		//			// order gearType ascending
+		//			gearItems = gearItems.OrderBy(i => i.GearType);
+		//			break;
+		//		default:
+		//			// order id ascending
+		//			gearItems = gearItems.OrderBy(i => i.Id);
+		//			break;
+		//	}
 
-			ViewBag.sortOrder = sortOrder;
-			ViewBag.flipOrder = flipOrder;
-			ViewBag.gearTypes = listOfGearTypes();
-			ViewBag.gearTypeFilter = gearTypeFilter;
-			ViewBag.searchCriteria = searchCriteria;
-			ViewBag.viewMode = "filter";
+		//	if (searchModel.FlipOrder)
+		//	{
+		//		gearItems = gearItems.Reverse();
+		//	}
 
-			return View(gearItems);
-		}
+		//	int pageNumber = (searchModel.PageNumber ?? 1);
+
+		//	IPaginator<WinterGear> paginator = new Paginator<WinterGear>(gearItems, 10, pageNumber);
+		//	ViewBag.paginator = paginator;
+
+		//	ViewBag.sortOrder = searchModel.SortOrder;
+		//	ViewBag.flipOrder = searchModel.FlipOrder;
+		//	ViewBag.gearTypes = listOfGearTypes();
+		//	ViewBag.gearTypeFilter = searchModel.GearTypeFilter;
+		//	ViewBag.searchCriteria = searchModel.SearchCriteria;
+		//	ViewBag.isSearch = true;
+
+		//	return View(gearItems);
+		//}
 
 		// GET: WinterGear/Details/5
 		[HttpGet]

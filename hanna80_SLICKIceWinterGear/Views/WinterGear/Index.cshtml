@@ -24,25 +24,35 @@
 	</div>
 </div>*@
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Index", "WinterGear", FormMethod.Get))
 {
 	<div id="FilterSearch" class="form-horizontal">
 
 		<div class="row">
 
 			<div class="form-group col-md-6">
-				@Html.Label("searchCriteria", "Search by Name", new { @class = "control-label" })
-				@Html.TextBox("searchCriteria", null, new { @class = "form-control" })
+				@Html.Label("SearchCriteria", "Search by Name", new { @class = "control-label" })
+				@Html.TextBox("SearchCriteria", null, new { @class = "form-control" })
 			</div>
 
 			<div class="form-group col-md-6">
-				@Html.Label("gearTypeFilter", "Filter by Gear Type", htmlAttributes: new { @class = "control-label" })
+				@Html.Label("GearTypeFilter", "Filter by Gear Type", htmlAttributes: new { @class = "control-label" })
 				@Html.DropDownList(
-				"gearTypeFilter",
+				"GearTypeFilter",
 				new SelectList(ViewBag.gearTypes),
 				"All Gear Types",
 				new { @class = "form-control" }
 			)
+			</div>
+
+		</div>
+
+		<div class="row">
+
+			<div class="form-group col-md-3">
+				@*@Html.Raw(paginator.RenderPaginatorSizeControl())*@
+				@Html.Label("PageSize", "Items Per Page", new { @class = "control-label" })
+				<input name="PageSize" class="form-control" type="number" value="@paginator.ItemsPerPage" />
 			</div>
 
 		</div>
@@ -56,14 +66,14 @@
 			<input
 				   type="button"
 				   value="Reset Ordering"
-				   onclick="location.href='@Url.Action("Index", "WinterGear", new { })'"
+				   onclick="location.href='@Url.Action("Index", "WinterGear", new { PageSize = paginator.ItemsPerPage })'"
 				   class="btn col-md-2 col-md-offset-1"
 			/>
-			@if (ViewBag.viewMode == "filter")
+			@if (ViewBag.isSearch)
 			{
 				<input type="button"
 					   value="Reverse Order"
-					   onclick="location.href='@Url.Action("Index", "WinterGear", new { searchCriteria = ViewBag.searchCriteria, gearTypeFilter = ViewBag.gearTypeFilter, sortOrder = ViewBag.sortOrder, flipOrder = !ViewBag.flipOrder })'"
+					   onclick="location.href='@Url.Action("Index", "WinterGear", new SearchViewModel { PageSize = paginator.ItemsPerPage, SearchCriteria = ViewBag.searchCriteria, GearTypeFilter = ViewBag.gearTypeFilter, SortOrder = ViewBag.sortOrder, FlipOrder = !ViewBag.flipOrder })'"
 					   class="btn col-md-2 col-md-offset-1"
 				/>
 			}
@@ -71,7 +81,7 @@
 			{
 				<input type="button"
 					   value="Reverse Order"
-					   onclick="location.href='@Url.Action("Index", "WinterGear", new { sortOrder = ViewBag.sortOrder, flipOrder = !ViewBag.flipOrder })'"
+					   onclick="location.href='@Url.Action("Index", "WinterGear", new SortViewModel { PageSize = paginator.ItemsPerPage, SortOrder = ViewBag.sortOrder, FlipOrder = !ViewBag.flipOrder })'"
 					   class="btn col-md-2 col-md-offset-1"
 				/>
 			}
@@ -86,11 +96,27 @@
 
 <hr />
 
-Page @(paginator.PageCount < paginator.CurrentPageNumber ? 0 : paginator.CurrentPageNumber) of @paginator.PageCount
-<br />
-<br />
-@Html.Raw(paginator.RenderPaginatorNav(page => Url.Action("Index",
-	new { page, sortOrder = ViewBag.sortOrder, flipOrder = ViewBag.flipOrder })))
+<p>
+	Page @(paginator.PageCount < paginator.CurrentPageNumber ? 0 : paginator.CurrentPageNumber) of @paginator.PageCount<br />
+	Total of @(paginator.ItemCount) @(paginator.ItemCount != 1 ? "items" : "item")
+</p>
+<div class="row">
+	<div class="col-md-12">
+		@if (paginator.PageCount > 1)
+		{
+			@if (ViewBag.isSearch)
+			{
+				@Html.Raw(paginator.RenderPaginatorNav(page => Url.Action("Index",
+					new SearchViewModel { PageNumber = page, PageSize = paginator.ItemsPerPage, SortOrder = ViewBag.sortOrder, FlipOrder = ViewBag.flipOrder, SearchCriteria = ViewBag.searchCriteria, GearTypeFilter = ViewBag.gearTypeFilter })));
+			}
+			else
+			{
+				@Html.Raw(paginator.RenderPaginatorNav(page => Url.Action("Index",
+					new SortViewModel { PageNumber = page, PageSize = paginator.ItemsPerPage, SortOrder = ViewBag.sortOrder, FlipOrder = ViewBag.flipOrder })));
+			}
+		}
+	</div>
+</div>
 
 <table class="table">
     <thead>
@@ -99,16 +125,16 @@ Page @(paginator.PageCount < paginator.CurrentPageNumber ? 0 : paginator.Current
                 @Html.DisplayNameFor(model => model.Id)
             </th>*@
             <th>
-				@Html.ActionLink(@Html.DisplayNameFor(model => model.Name).ToString(), "Index", new { sortOrder = "name" })
+				@Html.ActionLink(@Html.DisplayNameFor(model => model.Name).ToString(), "Index", new SearchViewModel { PageSize = paginator.ItemsPerPage, SortOrder = "name", FlipOrder = ViewBag.flipOrder, SearchCriteria = ViewBag.searchCriteria, GearTypeFilter = ViewBag.gearTypeFilter })
             </th>
             <th>
-                @Html.ActionLink(@Html.DisplayNameFor(model => model.Weight).ToString(), "Index", new { sortOrder = "weight" })
+                @Html.ActionLink(@Html.DisplayNameFor(model => model.Weight).ToString(), "Index", new SearchViewModel { PageSize = paginator.ItemsPerPage, SortOrder = "weight", FlipOrder = ViewBag.flipOrder, SearchCriteria = ViewBag.searchCriteria, GearTypeFilter = ViewBag.gearTypeFilter })
             </th>
             <th>
-                @Html.ActionLink(@Html.DisplayNameFor(model => model.GearType).ToString(), "Index", new { sortOrder = "gearType" })
+                @Html.ActionLink(@Html.DisplayNameFor(model => model.GearType).ToString(), "Index", new SearchViewModel { PageSize = paginator.ItemsPerPage, SortOrder = "gearType", FlipOrder = ViewBag.flipOrder, SearchCriteria = ViewBag.searchCriteria, GearTypeFilter = ViewBag.gearTypeFilter })
 			</th>
 			<th>
-				@Html.ActionLink(@Html.DisplayNameFor(model => model.Condition).ToString(), "Index", new { sortOrder = "condition" })
+				@Html.ActionLink(@Html.DisplayNameFor(model => model.Condition).ToString(), "Index", new SearchViewModel { PageSize = paginator.ItemsPerPage, SortOrder = "condition", FlipOrder = ViewBag.flipOrder, SearchCriteria = ViewBag.searchCriteria, GearTypeFilter = ViewBag.gearTypeFilter })
 			</th>
 			<th>
 			</th>
@@ -150,8 +176,23 @@ Page @(paginator.PageCount < paginator.CurrentPageNumber ? 0 : paginator.Current
     </tbody>
 </table>
 
-@Html.Raw(paginator.RenderPaginatorNav(page => Url.Action("Index",
-	new { page, sortOrder = ViewBag.sortOrder, flipOrder = ViewBag.flipOrder })))
+<div class="row">
+	<div class="col-md-12">
+		@if (paginator.PageCount > 1)
+		{
+			@if (ViewBag.isSearch)
+			{
+				@Html.Raw(paginator.RenderPaginatorNav(page => Url.Action("Index",
+					new SearchViewModel { PageNumber = page, PageSize = paginator.ItemsPerPage, SortOrder = ViewBag.sortOrder, FlipOrder = ViewBag.flipOrder, SearchCriteria = ViewBag.searchCriteria, GearTypeFilter = ViewBag.gearTypeFilter })));
+			}
+			else
+			{
+				@Html.Raw(paginator.RenderPaginatorNav(page => Url.Action("Index",
+					new SortViewModel { PageNumber = page, PageSize = paginator.ItemsPerPage, SortOrder = ViewBag.sortOrder, FlipOrder = ViewBag.flipOrder })));
+			}
+		}
+	</div>
+</div>
 <br />
 
 <a href="#">Top</a>
